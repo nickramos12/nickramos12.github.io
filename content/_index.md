@@ -1,6 +1,6 @@
 ---
 title: Let's Connect
-toc: false
+toc: true
 ---
 
 This is the landing page.
