@@ -1,7 +1,8 @@
 ---
-title: Cap
+title: Cap - An Easy Linux Machine
 type: docs
 prev: docs/labs/
+next: /
 ---
 
 Hello, here's what I did:

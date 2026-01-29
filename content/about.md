@@ -1,6 +1,8 @@
 ---
-title: About
+title: About Me
 type: about
 ---
 
-This is the about page.
+# Still working on something awesome
+
+Check back soon. 

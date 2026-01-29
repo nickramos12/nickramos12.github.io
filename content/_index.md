@@ -1,14 +1,33 @@
 ---
-title: Let's Connect
+title: Home Page
 toc: true
 ---
 
-This is the landing page.
+Welcome to my personal repository. Feel free to take a look around.
 
 ## Explore
 
 {{< cards >}}
-  {{< card link="docs" title="Docs" icon="book-open" >}}
-  {{< card link="about" title="About" icon="user" >}}
+  {{< card 
+    link="about" 
+    title="About Me" 
+    subtitle="Who I am, skills, background"
+    icon="user" 
+  >}}
+
+  {{< card 
+    link="docs" 
+    title="Docs"
+    subtitle="Full documentation on labs"
+    icon="book-open" 
+  >}}
+
+  {{< card 
+    link="docs" 
+    title="Projects"
+    subtitle="What I'm building or have built"
+    icon="clipboard" 
+  >}}
+
 {{< /cards >}}
 

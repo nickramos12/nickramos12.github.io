@@ -1,5 +1,5 @@
 # Hugo configuration file
-title: My Site
+title: Nick Ramos | Cybersecurity Professional
 
 # import hextra as module
 module:
@@ -18,14 +18,14 @@ markup:
 
 menu:
   main:
-    - name: Docs
-      pageRef: /docs
+    - name: Labs
+      pageRef: /labs
       weight: 1
-    - name: About
-      pageRef: /about
+    - name: Projects
+      pageRef: /projects
       weight: 2
-    - name: Contact ↗
-      url: "https://github.com/imfing"
+    - name: About Me
+      pageRef: /about
       weight: 3
     - name: Search
       weight: 4
@@ -33,19 +33,19 @@ menu:
         type: search
     - name: GitHub
       weight: 5
-      url: "https://github.com/imfing/hextra-starter-template"
+      url: "https://github.com/nickramos12/"
       params:
         icon: github
     - name: Twitter
       weight: 6
-      url: "https://twitter.com/"
+      url: "https://x.com/NicholasARamos"
       params:
         icon: x-twitter
 
 params:
   navbar:
-    displayTitle: true
-    displayLogo: false
+    displayTitle: false
+    displayLogo: true
 
   footer:
     displayCopyright: false
