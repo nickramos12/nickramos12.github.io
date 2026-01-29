@@ -25,7 +25,7 @@ The model also comes with an optical bay, which since that's pretty useless in 2
 
 It only took about a week for the device to show up, and to my surprise - there wasn't a single scratch on the casing. So I cracked her open to look at the goods. 
 
-![Lenovo Initial Internal](/media/PrivateServerBuild/lenovo-interior.jpg)
+![Lenovo Initial Internal](/media/PrivateServerBuild/lenovo-interior.JPG)
 
 And behold, a spotless interior. I think we made out fairly well with this one, despite not knowing if she boots. 
 
