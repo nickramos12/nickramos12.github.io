@@ -16,14 +16,14 @@ Welcome to my personal repository. Feel free to take a look around.
   >}}
 
   {{< card 
-    link="docs" 
-    title="Docs"
+    link="labs" 
+    title="Labs"
     subtitle="Full documentation on labs"
     icon="book-open" 
   >}}
 
   {{< card 
-    link="docs" 
+    link="projects" 
     title="Projects"
     subtitle="What I'm building or have built"
     icon="clipboard" 
