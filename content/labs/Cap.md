@@ -284,7 +284,7 @@ I quickly double-checked my privileges, then searched the directory and found `r
 
 First HacktheBox challenge complete.
 
-# Reflection: What I Learned from Cap
+# Reflection
 
 Cap was my first retired HackTheBox machine, and it was a perfect "very easy" introduction to real-world pentesting concepts. Here's what stuck with me the most:
 
