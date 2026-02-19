@@ -1,5 +1,5 @@
 ﻿---
-title: Building a Private Media Server
+title: Self-Hosted Media Streaming Infrastructure
 ---
 
 > This writeup focuses primarily on the hardware side of my first private server build.

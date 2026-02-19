@@ -1,0 +1,34 @@
+﻿/* Hero div full width & dark background */
+#hero {
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    background: #1a1a2e !important;  /* your dark grey-purple */
+    color: white !important;
+    padding: 8rem 2rem 6rem !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+/* Make all text inside white and readable */
+#hero * {
+    color: #ffffff !important;
+}
+
+/* Headline */
+#hero h1 {
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    margin: 0 0 0.5rem 0 !important;
+    line-height: 1.1 !important;
+}
+
+/* Subtitle / paragraphs */
+#hero p, #hero h2, #hero h3 {
+    font-size: 1.5rem !important;
+    color: #d1d5db !important;     /* light gray for subtitles */
+    margin: 0.5rem 0 2rem 0 !important;
+    max-width: 800px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}

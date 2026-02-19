@@ -1,33 +1,19 @@
+﻿---
+title: Introduction
+weight: 1
+cascade:
+  type: docs
+breadcrumbs: false
+next: /projects/self-hosted-media-streaming-infrastructure/
 ---
-title: Home Page
-toc: true
----
+👋🏼 Hello and welcome to my project documentation site! Here, you'll find writeups on the various projects I've either finished, or am still working on.
 
-Welcome to my personal repository. Feel free to take a look around.
+## About Me
+My name is Nick Ramos, and I'm an aspiring Cybersecurity Professional. I come from an insurance background, where I ran a local Property & Casualty insurance agency, Uplift Insurance Group.
+I started the company totally alone, and within 4 years I was able to successfully finalize an acquisition so I could pivot and pursue my true passion: technology.
 
-## Explore
+## Have Questions or Want to Connect?
+Feel free to reach out to me on my [X Profile](https://x.com/NicholasARamos) or [shoot me an email](mailto:nick.retool654@passmail.com)
 
-{{< cards >}}
-  {{< card 
-    link="about" 
-    title="About Me" 
-    subtitle="Who I am, skills, background"
-    icon="user" 
-  >}}
 
-  {{< card 
-    link="labs" 
-    title="Labs"
-    subtitle="Full documentation on labs"
-    icon="book-open" 
-  >}}
-
-  {{< card 
-    link="projects" 
-    title="Projects"
-    subtitle="What I'm building or have built"
-    icon="clipboard" 
-  >}}
-
-{{< /cards >}}
-
+Head here next:
