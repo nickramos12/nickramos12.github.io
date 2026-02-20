@@ -1,6 +1,5 @@
 ﻿---
 title: Self-Hosted Media Streaming Infrastructure
-description:
 params:
   images:
     - /media/MediaServerBuild/cover-photo.jpg
