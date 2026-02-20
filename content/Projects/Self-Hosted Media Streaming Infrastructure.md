@@ -1,114 +1,214 @@
 ﻿---
 title: Self-Hosted Media Streaming Infrastructure
 ---
+## Overview
 
-> This writeup focuses primarily on the hardware side of my first private server build.
-> The goal of this project is to have an efficient Proxmox server, running multiple VM's, providing me with various, dedicated home services.
+You can ask anyone who knows me - I'm *definitely* a movie guy.
+
+Now the problem is, I have a **huge** collection of 4k Ultra-HD movies - but they're locally stored at home on my desktop. 
+
+This means:
+- I can't access them while traveling
+- I can't share them with family or friends
+- If I want to take advantage of my 4k OLED TV, I have to Multi-cast (not user-friendly, poor performance)
+
+So I'd say it's about time I build my very own, self-hosted streaming app that can be accessed anywhere in the world - so long as I have internet access.
+
+Yes - I *could* buy a ready-made server, but where's the fun in that?
+
+## Hardware & OS
+
+First things first, we need some hardware. I love my desktop - it's a pre-built gaming PC and definitely has the juice to stream high quality movies, but I don't exactly want to burn up my hardware since servers are always on. 
+
+So I headed to eBay and picked up an old Lenovo to use as my base machine. 
+
+![Lenovo ThinkCentre M720s - eBay Listing](/media/MediaServerBuild/lenovo-ebay-listing.jpg "Lenovo ThinkCentre M720s Intel i5 8th Gen w/ Quick Sync")
+
+ThinkCentre models are business-grade, so they're built to last. On top of that, this model comes with 'Intel Quick Sync' hardware transcoding. I checked the specs, and this should allow me to bypass the need for a dedicated graphics card.
+
+Once it arrived, I made a few upgrades:
+1. Installed 512GB SSD for my dedicated boot drive
+2. Replaced the 1TB Western Digital HDD with an 8TB IronWolf HDD.
+3. Added a 16GB Ripsaw DDR4 (Now has 24GB of RAM Total)
+3. Gave the CPU fresh thermal paste (who knows how old it was?)
+
+Now, I definitely made a mistake here. From my research, I was under the impression that this machine had 2 - 3.5" HDD cages, but when it arrived I found that it *actually* had one 3.5" cage, and one 2.5" cage. 
+So that pretty much killed my dreams of mirroring my hard drives for redundancy, but we're going to make it work by using rsync to regularly backup our disk images, as well as our media storage.
+
+Given that, I ordered this 8TB External HDD. 
+
+![Seagate Expansion Desktop Drive](/media/MediaServerBuild/HDD-external-ebay.jpg "Seagate Expansion Desktop Drive 8TB USB 3.0" )
+
+For the operating system - I decided to go with [Proxmox VE](https://proxmox.com/en/products/proxmox-virtual-environment/overview). 
+
+Proxmox is an enterprise-grade, open source server management platform which will allow me to run as many Linux Containers/Virtual Machines as my hardware will allow.
+
+It was super easy to install - I simply grabbed the [latest ISO for Proxmox VE](https://proxmox.com/en/downloads), and flashed it to a spare USB with [Rufus](https://rufus.ie/en/). 
+
+From there, I just followed the installation process, and about 10 minutes later I was logged into my Proxmox Web client. 
+
+![Proxmox Dashboard](/media/MediaServerBuild/proxmox-dashboard.jpg "Quick Snapshot of Proxmox VE Dashboard" )
+
+*ignore the '16GB of RAM' showing, I originally swapped the factory installed 8GB for 16GB but then realized that was stupid - just run both 🤷🏼‍♂️*
+
+## Virtualization Setup
+
+To help keep things more secure, I decided to store my media in its own LXC, and operate Jellyfin out of another. (both LXC's unprivileged, of course)
+I also wanted to host a few support/automation apps, and I'll be doing that with Docker via a Virtual Machine running Ubuntu Server.
+
+| Name             | Type | Cores   | RAM  | Disk  | OS            |
+|------------------|------|---------|------|-------|---------------|
+| Media  (101)     | LXC  | 2 Cores | 2GB  | 64GB  | Ubuntu        |
+| Jellyfin  (102)  | LXC  | 4 Cores | 3GB  | 32GB  | Ubuntu        |
+| Servarr    (103) | VM   | 4 Cores | 12GB | 64GB  | Ubuntu Server |
+
+After I launched all of my containers/machines - I logged into the node shell and ran a quick `sudo apt install openssh`, then added my public key so I could easily log in via my host pc. (Using the console inside Proxmox is a PAIN)
+
+![OpenSSH](/media/MediaServerBuild/openssh-console.jpg "Yes you can see my IP but does it really matter?" )
+
+Technically, I could install OpenSSH on each container & the VM - but you can easily manage the entire datacenter from the node - it's all preference.
+
+## Media Storage & Streaming
+
+So in order for Jellyfin and the Media storage to work correctly, we need to:
+- Activate Intel QuickSync Hardware Transcoding (/dev/dri/renderD128)
+- Mount the 'tank' (Internal HDD) to both LXC's, but enforcing 'read only' least privilege on Jellyfin
+
+Here's a quick snapshot of the configurations for both containers:
+
+```bash {filename="/etc/pve/lxc/100.conf"}
+root@pve:/# cat /etc/pve/lxc/100.conf
+#ipv4 = 192.168.1.3/24
+arch: amd64
+cores: 2
+features: nesting=1
+hostname: media
+memory: 2048
+mp0: tank:subvol-100-disk-0,mp=/data,size=6700G
+mp1: local-lvm:vm-100-disk-1,mp=/docker,size=32G
+net0: name=eth0,bridge=vmbr0,firewall=1,gw=192.168.1.1,hwaddr=BC:24:11:D3:BA:02,ip=192.168.1.3/24,type=veth
+onboot: 1
+ostype: ubuntu
+rootfs: local-lvm:vm-100-disk-0,size=64G
+swap: 1028
+unprivileged: 1
+root@pve:/#
+```
+
+```bash {filename="/etc/pve/lxc/101.conf"}
+root@pve:/# cat /etc/pve/lxc/101.conf
+#ipv4 = 192.168.1.4/24
+arch: amd64
+cores: 4
+features: nesting=1
+hostname: jellyfin
+memory: 3072
+mp0: tank:subvol-100-disk-0,mp=/mnt/media,ro=0
+net0: name=eth0,bridge=vmbr0,firewall=1,gw=192.168.1.1,hwaddr=BC:24:11:C0:6A:D8,ip=192.168.1.4/24,type=veth
+onboot: 1
+ostype: ubuntu
+rootfs: local-lvm:vm-101-disk-0,size=32G
+swap: 1028
+unprivileged: 1
+lxc.idmap: u 0 100000 65536
+lxc.idmap: g 0 100000 108
+lxc.idmap: g 108 993 1
+lxc.idmap: g 109 100109 65427
+lxc.apparmor.profile: unconfined
+lxc.cap.drop:
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.mount.entry: /dev/dri dev/dri none bind,optional,create=dir 0 0
+lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file 0 0
+root@pve:/#
+```
+
+You may notice the Jellyfin config file is a bit longer, and that's because I initially launched LXC 101 as a *privileged* container, and then I had to go back and change it, and update the privilege translations.
+This was a major error on my part, and I paid the price by having to educate myself on privilege translations. 
+
+So at this point, LXC 100 'Media' stores files, and LXC 101 'Jellyfin' can read and stream them using Intel QuickSync.
+
+{{< callout >}}
+Hardware transcoding is **crucial** because this machine has no graphics card *and* is a small form factor design - meaning I have limited options for GPUs to begin with. 
+From my research, Intel QuickSync (8th Gen or later) can technically transcode up to 3 different 4k streams at a time, so our use case should fall right in line with this device's capabilities.
+{{< /callout >}}
+
+And finally, we just need to install Jellyfin on LXC 101, and make some quick setting adjustments inside the app. 
+
+I went ahead and used this command straight from Jellyfin's [Documentation](https://jellyfin.org/docs/):
+
+> `curl https://repo.jellyfin.org/install-debuntu.sh | sudo bash`
+
+Then I simply logged into Jellyfin, created a username & password, and headed straight for the settings to enable hardware transcoding.
+
+![Jellfin Settings Pt.1](/media/MediaServerBuild/jellyfin-transcoding.jpg "Navigate to Playback > Transcoding" )
+
+From here, I selected my iGPU brand, and specified the path to the device. I also deselected every encoding type except HEVC, H264, and HEVC 10bit - DYOR.
+
+Additionally, if you have movies with HDR (tone mapping), you'll want to check these boxes to avoid blowing out your CPU.
 
 
-## Choosing a Base Model
-
-The goal for this project is to build a versatile private server, but I want to stick to a basic budget of <$500. 
-
-I found this old Lenovo Thinkcentre on eBay for ~$130. This should serve as a great base to build upon, considering the budget.
-
-![Lenovo eBay Listing](/media/PrivateServerBuild/lenovo-ebay-listing.jpg)
+![Jellfin Settings Pt.1](/media/MediaServerBuild/jellyfin-transcoding2.jpg "Most newer movies include HDR" )
 
 
-Per the listing it comes with:
-- Intel Core i5 Processor (8th gen) w/ Quick Sync)
-- 8GB DDR4 RAM (+ 3 Additional Slots)
-- 1TB 3.5" HDD Storage (Addtl 2.5" slot for future expansion)
+## Automated Download Pipeline
 
-The reasons I opted for this model:
-- 8th Gen Processor + Quick Sync creates less overhead for media transcoding (Project #1 is Media Streaming)
-- ThinkCentre models are commercial lines, they're built to last
-- Open m.2 Slot for Upgraded Boot Drive (SSD)
+Moving on to the VM running Ubuntu Server. First thing I did (of course after running `sudo apt update && sudo apt upgrade`) was to install Docker. 
 
-For $130 bucks, this is a great starting point. 
+And to our luck, Docker **also** has a beautifully easy 2-step process for install, according to their documentation
 
 
-## Hardware Upgrades
 
-First thing on the docket - install the dedicated SSD boot drive for better performance. 
+The Ubuntu VM, VPN routing via Gluetun, your download client, how automation ties into Jellyfin
 
-I checked Facebook Marketplace, found a guy selling SSDs in various sizes for incredible cheap (I paid $15 for 512gb) and he even provided a CrystalDisk report showing near zero hours. 
+## Networking
 
-![SSD Expansion](/media/PrivateServerBuild/ssd-expansion.jpg)
+I elected to go with static ip assignments to help keep the virtualization organized. 
+My LAN is a singular subnet (192.168.1.0/24) and my ISP's gateway comes with a default DHCP scope of 192.168.1.100 thru 192.168.1.200 - 
+so matching the container ID's with IP Addresses wasn't going to happen.
 
-I ended up needing an aftermarket caddy to secure the drive ($12), and I opted for a custom heatsink as well ($15).
+| Name     | ID   | IP Address  |
+|----------|------|-------------|
+| PVE      | Node | 192.168.1.2 |
+| Media    | 101  | 192.168.1.3 |
+| Jellyfin | 102  | 192.168.1.4 |
+| Servarr  | 103  | 192.168.1.5 |
 
-I'm a bit nervous of the heat since this model is so compact, but the heatsink should help. 
+DNS: I went with CloudFlare: `1.1.1.1, 1.0.0.1`
+Ethernet: Cat6a
 
-Next, I swapped in new memory - specifically a pair of Ripsaws I bought off Facebook Marketplace ($20 STEAL)
+On top of that I decided to `apt install samba` because my movie collection is quite large, and dealing with the console *every* time I want to manage my library, won't be very efficient.
 
-![RAM Swap](/media/PrivateServerBuild/ram-swap.jpg)
+![Windows Network Share](/media/MediaServerBuild/net-share.jpg "Sharing over SMB provides quicker access to my library" )
 
-One of the sticks ended up being DOA, but for $20 - 16GB of DDR4 isn't something I'll complain about.
-Especially since I could just downclock the Ripsaw and use the 8GB Ramaxel card that came with the Lenovo.
+Still working on setting up nginx for reverse proxy, and purchasing a domain for my TLS certificate. Will update here soon or maybe I'll add a 'Hardening' section.
 
-I also took a second to clean off the old, crusty thermal paste and applied it fresh to help keep core temperature's stable.
+## Reflecting on Challenges & Lessons
 
-![Fresh Thermal Paste](/media/PrivateServerBuild/thermal-paste.jpg)
+### Troubleshooting Linux Permissions
 
-And finally, I swapped the current Western Digital 1TB HDD for a Seagate IronWolf 8TB NAS.
+This was my first major project that involved linux commands (aside from basics like `ping` & `nmap`), so I essentially speed-ran an introduction to Linux. 
+Most notably, I ran into major issues with my file/directory permissions. I had zero clue how to read something like `drwx---r-x` - which led me down a frustrating loop of Jellyfin being unable to read the device driver (`/dev/dri/renderD128`), and the error code was quite ambiguous. 
+I was able to pinpoint the permission issue with a little help from Claude, and monitoring `journalctl`. After a quick education session with Claude, and a few YouTube videos - I fixed the permission issue. 
 
-![Fresh Thermal Paste](/media/PrivateServerBuild/hdd-expansion.jpg)
+### iGPU Passthrough Failure
 
-Now for storage backup, I would have preferred to do a ZFS pool, but I overlooked one small factor: the additional HDD slot is 2.5", not 3.5". 
+Initially, I had Jellyfin hosted through docker (separate compose.yaml file) on the same VM as my automation & organization clients - but passing through the hardware transcoder was proving to be quite difficult. 
+I kept getting one error after another, and most of them we're very ambiguous. 
+I confirmed the permissions, added the device to path, *specified* the path in Jellyfin, made sure the device was correctly added to the VM config file - but it just would **not** cooperate.
+After a few days of research, I ended up finding that Jellyfin actually recommends for you to use a container instead when hardware transcoding. 
 
-Fat chance I'll be able to find 8TB HDD in 2.5" - so I went with an external unit, and I'll just mount it manually at the shell. 
+So I deleted the docker container housing Jellyfin, and installed it directly into an LXC - no more issues.
+
+You can verify hardware transcoding is active by seeing little to no CPU usage, I used `htop`
 
 
-# Installing & Configuring the Operating System
 
-Since the goal of this server is to be multi-functional, I landed on Proxmox for my operating system. 
 
-![Proxmox Website](/media/PrivateServerBuild/proxmox-web.jpg)
 
-Proxmox is an open-source virtual environment, tailored for managing virtual machines and containers. 
-This should give me the flexibility to expand into future projects like managing my network with OPNsense, or creating a media library with Ubunto.
+### OpenSSH Basics
 
-I downloaded the Proxmox ISO file, and created a bootable drive with Rufus. 
-
-![Creating a Bootable Drive](/media/PrivateServerBuild/rufus-boot.jpg)
-
-Once the drive had been successfully flashed, I moved to my server - fired her up and smashed F12 to get into NetBIOS.
-Then I let it do it's thing.
-
-Once it was done, I set my credentials and assigned a static IP address outside my network's DHCP range.
-
-and voila - she's alive. 
-
-![Proxmox Dashboard](/media/PrivateServerBuild/proxmox-dashboard.jpg)
-
-By default, Proxmox assumes enterprise use, so we'll need to configure it to the No-Subscription plan via a convenient post-install script.  
-
-![Post Install Script](/media/PrivateServerBuild/post-install.jpg)
-
-Here's the [link](https://community-scripts.github.io/ProxmoxVE/scripts?id=post-pve-install) if you're interested.
-
-And once that was complete, I ran `apt update` to check for updates - and to no surprise there were quite a few - so I upgraded.
-
-Last change we need to make, enabling IOMMU (Input–Output Memory Management Unit).
-
-IOMMU essentially provides direct access for VMs to safely use physical hardware - and since one of the usecases for my server is to build a streaming app, I'll want that VM to have access to the Intel Quick Sync function (media transcoder).
-
-In shell, type: `nano /etc/default/grub` which should bring you here:
-
-![IOMMU Update](/media/PrivateServerBuild/updated-iommu.jpg)
-
-Update the line `GRUB_CMDLINE_LINUX_DEFAULT="quiet"` to `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on iommu=pt"`
-
-Hit Ctrl + O (saves) > Enter (confirm save) > Ctrl + X (exit editor)
-
-Now run `update-grub`
-
-then `reboot`
-
-After reboot, you can check to ensure IOMMU is enabled by using `dmesg | grep -i iommu`
-
-![IOMMU Enabled](/media/PrivateServerBuild/IOMMU-enabled.jpg)
+Previous to this project, I also had near zero experience using SSH, but since the console access through proxmox was a bit clunky, I went for a quick detour of OpenSSH training. 
 
 
 
