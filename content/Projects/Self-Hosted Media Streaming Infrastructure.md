@@ -153,13 +153,22 @@ Additionally, if you have movies with HDR (tone mapping), you'll want to check t
 
 ## Automated Download Pipeline
 
-Moving on to the VM running Ubuntu Server. First thing I did (of course after running `sudo apt update && sudo apt upgrade`) was to install Docker. 
+Moving on to the VM running Ubuntu Server. First thing I did (of course after running
+`sudo apt update && sudo apt upgrade`) was to install Docker.
 
-And to our luck, Docker **also** has a beautifully easy 2-step process for install, according to their documentation
+And to our luck, Docker **also** has a beautifully easy 2-step process for install,
+according to their [documentation](https://docs.docker.com/engine/install/ubuntu/).
 
+From there, I deployed a handful of containerized services via Docker Compose —
+including a VPN client (Gluetun) to route all download traffic through an encrypted
+tunnel, a download client, and a few API-based media management services that
+automatically monitor, fetch, and organize new media into the correct library folders.
 
+All download traffic is routed exclusively through the VPN container — if the VPN
+drops, traffic stops. No leaks.
 
-The Ubuntu VM, VPN routing via Gluetun, your download client, how automation ties into Jellyfin
+Once media is downloaded and organized, it lands in the shared storage volume where
+Jellyfin picks it up automatically — no manual intervention required.
 
 ## Networking
 
@@ -198,20 +207,9 @@ I kept getting one error after another, and most of them we're very ambiguous.
 I confirmed the permissions, added the device to path, *specified* the path in Jellyfin, made sure the device was correctly added to the VM config file - but it just would **not** cooperate.
 After a few days of research, I ended up finding that Jellyfin actually recommends for you to use a container instead when hardware transcoding. 
 
-So I deleted the docker container housing Jellyfin, and installed it directly into an LXC - no more issues.
+So I deleted the docker container running Jellyfin, and installed it directly into an LXC - no more issues.
 
 You can verify hardware transcoding is active by seeing little to no CPU usage, I used `htop` but you can also use `intel_gpu_top` (just make sure to install both)
-
-
-
-
-
-
-### OpenSSH Basics
-
-Previous to this project, I also had near zero experience using SSH, but since the console access through proxmox was a bit clunky, I went for a quick detour of OpenSSH training. 
-
-
 
 
 
