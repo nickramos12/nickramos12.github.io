@@ -1,7 +1,7 @@
 ﻿---
 title: Self-Hosted Media Streaming Infrastructure
 params:
-  image:
+  images:
     - /media/cover-photo.jpg
 
 ---
