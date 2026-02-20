@@ -167,12 +167,12 @@ I elected to go with static ip assignments to help keep the virtualization organ
 My LAN is a singular subnet (192.168.1.0/24) and my ISP's gateway comes with a default DHCP scope of 192.168.1.100 thru 192.168.1.200 - 
 so matching the container ID's with IP Addresses wasn't going to happen.
 
-| Name     | ID   | IP Address  |
-|----------|------|-------------|
-| PVE      | Node | 192.168.1.2 |
-| Media    | 101  | 192.168.1.3 |
-| Jellyfin | 102  | 192.168.1.4 |
-| Servarr  | 103  | 192.168.1.5 |
+| Name       | ID   | IP Address  |
+|------------|------|-------------|
+| pve        | Node | 192.168.1.2 |
+| media      | 101  | 192.168.1.3 |
+| jellyfin   | 102  | 192.168.1.4 |
+| media-apps | 103  | 192.168.1.5 |
 
 DNS: I went with CloudFlare: `1.1.1.1, 1.0.0.1`
 Ethernet: Cat6a
@@ -200,7 +200,8 @@ After a few days of research, I ended up finding that Jellyfin actually recommen
 
 So I deleted the docker container housing Jellyfin, and installed it directly into an LXC - no more issues.
 
-You can verify hardware transcoding is active by seeing little to no CPU usage, I used `htop`
+You can verify hardware transcoding is active by seeing little to no CPU usage, I used `htop` but you can also use `intel_gpu_top` (just make sure to install both)
+
 
 
 
