@@ -56,11 +56,11 @@ From there, I just followed the installation process, and about 10 minutes later
 To help keep things more secure, I decided to store my media in its own LXC, and operate Jellyfin out of another. (both LXC's unprivileged, of course)
 I also wanted to host a few support/automation apps, and I'll be doing that with Docker via a Virtual Machine running Ubuntu Server.
 
-| Name             | Type | Cores   | RAM  | Disk  | OS            |
-|------------------|------|---------|------|-------|---------------|
-| Media  (101)     | LXC  | 2 Cores | 2GB  | 64GB  | Ubuntu        |
-| Jellyfin  (102)  | LXC  | 4 Cores | 3GB  | 32GB  | Ubuntu        |
-| Servarr    (103) | VM   | 4 Cores | 12GB | 64GB  | Ubuntu Server |
+| Name                | Type | Cores   | RAM  | Disk  | OS            |
+|---------------------|------|---------|------|-------|---------------|
+| Media  (101)        | LXC  | 2 Cores | 2GB  | 64GB  | Ubuntu        |
+| Jellyfin  (102)     | LXC  | 4 Cores | 3GB  | 32GB  | Ubuntu        |
+| media-apps    (103) | VM   | 4 Cores | 12GB | 64GB  | Ubuntu Server |
 
 After I launched all of my containers/machines - I logged into the node shell and ran a quick `sudo apt install openssh`, then added my public key so I could easily log in via my host pc. (Using the console inside Proxmox is a PAIN)
 
