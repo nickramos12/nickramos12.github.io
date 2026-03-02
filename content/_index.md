@@ -4,7 +4,7 @@ weight: 1
 cascade:
   type: docs
 breadcrumbs: false
-next: /projects/self-hosted-media-streaming-infrastructure/
+next: /projects/private-media-streaming-server/
 ---
 
 {{< callout type="warning" >}}

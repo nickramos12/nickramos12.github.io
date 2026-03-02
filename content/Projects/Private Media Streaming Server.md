@@ -1,5 +1,5 @@
 ﻿---
-title: I Built My Own Netflix From Scratch
+title: Private Media Streaming Server
 params:
   images:
     - /media/MediaServerBuild/cover-photo.jpg

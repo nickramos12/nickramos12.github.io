@@ -10,7 +10,7 @@ cascade:
 ## Explore my Latest Projects
 
 {{< cards cols="2" >}}
-{{< card title="Self-Hosted Media Streaming Infrastructure" subtitle="I built a self-hosted media streaming platform with Proxmox & Ubuntu Server." icon="play" link="self-hosted-media-streaming-infrastructure" >}}
+{{< card title="Private Media Streaming Server" subtitle="I built a self-hosted media streaming platform with Proxmox & Ubuntu Server." icon="play" link="self-hosted-media-streaming-infrastructure" >}}
 {{< /cards >}}
 
 *More coming soon!*
