@@ -27,11 +27,11 @@ menu:
       url: "https://github.com/nickramos12/"
       params:
         icon: github
-    - name: Twitter
+    - name: LinkedIn
       weight: 6
-      url: "https://x.com/NicholasARamos"
+      url: "https://www.linkedin.com/in/thenicholasramos/"
       params:
-        icon: x-twitter
+        icon: linkedin
       
 
 params:
