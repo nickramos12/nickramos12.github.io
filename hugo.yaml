@@ -18,6 +18,11 @@ markup:
 
 menu:
   main:
+    - name: Certifications
+      weight: 3
+      url:
+      params:
+        icon: academic-cap
     - name: Search
       weight: 4
       params:
