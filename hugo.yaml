@@ -18,11 +18,11 @@ markup:
 
 menu:
   main:
-    - name: Certifications
-      weight: 3
-      url:
+    - name: Credly
+      weight: 7
+      url: "https://www.credly.com/users/nicholas-ramos.123ba8e4/badges"
       params:
-        icon: academic-cap
+        icon: badge-check
     - name: Search
       weight: 4
       params:
