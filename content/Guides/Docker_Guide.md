@@ -1,7 +1,7 @@
 ﻿---
 linkTitle: Docker
 ---
-![Guide to Using Docker](/media/docker-guide/cover.jpg)
+![Guide to Using Docker](/media/guides/docker/cover.jpg)
 
 &nbsp;
 
@@ -45,7 +45,7 @@ graph TD;
 You can browse through [Docker Hub](https://hub.docker.com) for pre-built images. 
 There are hundreds of options to choose from.
 
-![Docker Hub](/media/docker-guide/docker-hub-ss.jpg)
+![Docker Hub](/media/guides/docker/docker-hub-ss.jpg)
 
 Some key commands you should know: 
 
@@ -62,7 +62,7 @@ Some key commands you should know:
 > [!TIP]
 > You may see something like `docker pull node:trixie-slim` instead of just `docker pull node` - this is because 
 > you can specify versions of the image you intend to work with.
-> ![Docker Versions](/media/docker-guide/docker-versions-example.jpg 'Tags == Versions in Docker Hub' )
+> ![Docker Versions](/media/guides/docker/docker-versions-example.jpg 'Tags == Versions in Docker Hub' )
 
 Prebuilt images cover most common runtimes and tools. You'll want to build your own when you need to package your actual application code.
 
