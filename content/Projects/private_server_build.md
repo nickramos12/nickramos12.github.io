@@ -2,7 +2,7 @@
 title: Private Server Build
 params:
   images:
-    - /media/MediaServerBuild/cover-photo.jpg
+    - /media/projects/private_server_build/cover-photo.jpg
 ---
 > I wanted to stop paying for services I could run myself. 
 > What started as a simple media server turned into a deep dive into self-hosted infrastructure — Proxmox, containerization, reverse proxying, and Zero Trust security, all running on a $200 eBay machine. 
