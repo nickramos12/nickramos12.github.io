@@ -4,9 +4,16 @@ params:
   images:
     - /media/projects/private_server_build/cover-photo.jpg
 ---
-> I wanted to stop paying for services I could run myself. 
-> What started as a simple media server turned into a deep dive into self-hosted infrastructure — Proxmox, containerization, reverse proxying, and Zero Trust security, all running on a $200 eBay machine. 
+> I wanted to stop paying for services I could run myself.
+> What started as a simple media server turned into a deep dive into self-hosted infrastructure — Proxmox, containerization, reverse proxying, and Zero Trust security, all running on a $200 eBay machine.
 > No monthly fees. Full control.
+
+## TLDR
+
+Built a multi-service homelab on a $200 Lenovo M720s running Proxmox. 
+Hosts Jellyfin, media automation, Nginx reverse proxy, Cloudflare Zero Trust tunnels, and a self-hosted AI stack (Ollama/N8N) across 6 isolated VMs/containers. 
+Security hardened with Zero Trust auth, MFA, disabled root SSH, and WPA3. 
+Future plans include network segmentation/DMZ, 802.1X, a dedicated AI node with GPU, and a DIY NAS.
 
 ## Hardware & Operating Systems
 
