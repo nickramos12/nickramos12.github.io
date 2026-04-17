@@ -1,9 +1,38 @@
-# Hugo output
+# Hugo build output
 public/
+resources/_gen/
 .hugo_build.lock
+hugo_stats.json
 
-# Editor
+# Hugo generated search/index files (Hextra)
+static/en.search.js
+static/en.search-data.json
+
+# Editor / IDE
 .vscode/
 .idea/
-.git/
- 
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node 
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# env
+.env
+.env.local
+*.key
+*.pem
+config.local.*
+
+# Backup / temp files
+*.bak
+*.tmp
+*.orig
