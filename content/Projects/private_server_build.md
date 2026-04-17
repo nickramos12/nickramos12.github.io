@@ -1,5 +1,6 @@
 ﻿---
 title: Private Server Build
+weight: 1
 params:
   images:
     - /media/projects/private_server_build/cover-photo.jpg
