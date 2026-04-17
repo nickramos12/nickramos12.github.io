@@ -13,4 +13,14 @@ cascade:
 {{< card title="Private Media Streaming Server" subtitle="I built a self-hosted media streaming platform with Proxmox & Ubuntu Server." icon="play" link="self-hosted-media-streaming-infrastructure" >}}
 {{< /cards >}}
 
-*More coming soon!*
+&nbsp;
+
+## Future Project List
+- [x] Streaming Server
+- [ ] Network Architecture (VLANs + OPNsense + firewall rules)
+- [ ] RADIUS Authentication
+- [ ] Monitoring Stack (Prometheus + Grafana)
+- [ ] SIEM Home Build (Wazuh)
+- [ ] Ansible Automation
+- [ ] Backup & DR Strategy
+- [ ] Python Homelab Health Check Script
