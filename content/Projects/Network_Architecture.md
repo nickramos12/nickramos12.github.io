@@ -8,3 +8,4 @@ Currently in-progress as of 04/17/26:
 - DMZ Implementation for Server
 - Network level VPN for outbound traffic
 - Phase 1 of Firewall Rules
+
