@@ -1,5 +1,5 @@
 ﻿---
-linkTitle: Posts
+linkTitle: Labs
 weight: 1
 breadcrumbs: false
 sidebar:

@@ -19,6 +19,6 @@ cascade:
 - [x] Streaming Server: Can stream full collection of movies from anywhere in the world
 - [ ] Network Architecture: OPNsense install, device segmentation, screened subnet, basic ACLs
 - [ ] RADIUS Authentication: Moving away from PSK and onto user credentials
-- [ ] Complete Dual Stack IPv6/IPv4: Default IPv6 for simpler routing, IPv4 backup
 - [ ] SIEM Home Build: Still putting this together
+- [ ] Complete Dual Stack IPv6/IPv4: Default IPv6 for simpler routing, IPv4 backup
 - [ ] Self-Hosted AI Node: Target 60gbs+ of VRAM for Qwen3.5 via Ollama and OpenGui. 
