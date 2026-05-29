@@ -1,6 +1,9 @@
 ﻿---
 title: Zero Trust Architecture v1.0
-weight: 2
+weight: 3
+params:
+  images:
+    - /media/projects/zero_networkv1/wFeoN.jpg
 ---
 #### TLDR
 
