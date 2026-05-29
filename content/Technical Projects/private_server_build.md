@@ -1,5 +1,5 @@
 ﻿---
-title: Proxmox Server 1.0
+title: Proxmox Server v1.0
 weight: 1
 params:
   images:

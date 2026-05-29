@@ -1,5 +1,5 @@
 ﻿---
-title: Zero Trust Architecture v1
+title: Zero Trust Architecture v1.0
 weight: 2
 ---
 #### TLDR
