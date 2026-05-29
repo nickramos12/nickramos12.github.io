@@ -1,5 +1,5 @@
 ﻿---
-title: Private Server Build
+title: Proxmox Server 1.0
 weight: 1
 params:
   images:
